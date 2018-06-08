@@ -67,6 +67,18 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  double eps = 0.001;
+
+  int n_sig_;
+
+  double NIS_radar_;
+
+  double NIS_laser_;
+
+  MatrixXd R_radar_;
+
+  MatrixXd R_lidar_;
+
 
   /**
    * Constructor
@@ -83,6 +95,19 @@ public:
    * @param meas_package The latest measurement data of either radar or laser
    */
   void ProcessMeasurement(MeasurementPackage meas_package);
+
+  /**
+   * Initialize
+   * @param meas_package
+   */
+  void Initialize(MeasurementPackage meas_package);
+
+  /**
+   * Prdicts sigma points
+   */
+  void PredictSigmaPoints(double delta_t, double delta_t2, MatrixXd Xsig_aug);
+
+  void Normalize(double *angle);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
@@ -102,6 +127,8 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  void Update(MeasurementPackage meas_package, MatrixXd Zsig, int n_z, MatrixXd R);
 };
 
 #endif /* UKF_H */
